@@ -5,6 +5,11 @@ deterrent system. A USB camera feeds an ONNX object-detection model; detected
 animals are shown in a browser dashboard and can trigger class-specific audio
 patterns through a connected speaker or amplifier.
 
+The accompanying thesis evaluates whether a low-cost, CPU-only embedded device
+can provide useful real-time detection without cloud connectivity. The
+experimental system compares seven lightweight YOLO-family detectors on a
+seven-class dataset and deploys the selected model with an acoustic deterrent.
+
 ## Repository layout
 
 - [`Code/rpi5_dashboard.py`](Code/rpi5_dashboard.py) — headless HTTP dashboard,
@@ -46,6 +51,15 @@ The detector recognizes the model's fixed class order: `cat`, `cow`, `dog`,
 `fox`, `goat`, `human`, and `snake`. Humans are displayed but do not trigger
 the deterrent audio.
 
+## Reported benchmark
+
+The deployed YOLO26n INT8-TFLite build reaches approximately 104 FPS at
+`320x320` on a Raspberry Pi 5 CPU, compared with approximately 34.8 FPS for the
+FP32-ONNX reference. The reported INT8 model occupies about 2.87 MB and reaches
+approximately 0.888 mAP@0.5 on the evaluation set. These figures depend on the
+hardware, runtime, model export, and test protocol; reproduce them on the target
+device before treating them as acceptance criteria.
+
 ## Start on boot
 
 After confirming that the camera, model, and audio device work manually, run:
@@ -67,6 +81,22 @@ The scripts are intended for a Raspberry Pi 5 with a USB camera and an audio
 output suitable for the deterrent speaker. Camera index, capture dimensions,
 audio device, confidence threshold, and HTTP port are configurable through the
 dashboard command-line options.
+
+## Thesis and reproducibility
+
+The LaTeX thesis source is maintained separately from this code-only repository.
+Its main document assembles the introduction, literature review, methodology,
+results, and conclusion chapters. For a reproducible evaluation, keep the
+dataset split, class order, input resolution, confidence threshold, model
+precision, warm-up iterations, timed iterations, and Raspberry Pi software
+environment fixed and record them with every benchmark.
+
+## Safety and scope
+
+This project is a research prototype. Validate audio levels, enclosure safety,
+battery autonomy, false activations, and effects on people, livestock, and
+wildlife before field deployment. Detection output should be treated as an
+assistance signal rather than a replacement for human supervision.
 
 ## License
 
